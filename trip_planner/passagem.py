@@ -39,20 +39,23 @@ class Data:
     def __str__(self: 'Data') -> str:
         return f'{self._dia}/{self._mes}/{self._ano}'
     
+    @staticmethod
     def get_from_string(string: str) -> 'Data':
         dia, mes, ano = map(int, string.split('/'))
         return Data(dia, mes, ano)
     
+    @classmethod
     def __date__(self: 'Data') -> date:
         return date(self._ano, self._mes, self._dia)
-    
+
+    @classmethod  
     def __dateformat__(self: 'Data') -> str:
         return "{:02d}/{:02d}/{:04d}".format(self._dia, self._mes, self._ano)
 
 class Voo:
     '''
     Voo
-    --------
+    -
     Represents a flight with a number, destination, departure date and price.
     '''
     def __init__(self: 'Voo', number: str, destination: str, departure: Data, price: float) -> None:
@@ -95,25 +98,23 @@ class Voo:
     def __str__(self: 'Voo') -> str:
         return f'{self._number} {self._destination[0]} {self._destination[1]} {self._departure} {self._price}'
     
-    def __date__(self: 'Voo') -> date:
-        return self._departure.__date__()
-    
-    def __dateformat__(self: 'Voo') -> str:
-        return self._departure.__dateformat__()
-    
-    def sumFlightsCost(flight_come: 'Voo', flight_leave: 'Voo') -> float:
-        return flight_come.price + flight_leave.price
-    
+    @staticmethod
     def register(number: str, destination: str, departure: str, price: float) -> 'Voo':
         date = Data.get_from_string(departure).__date__()
         voo = Voo(number, (destination.split()), date, float(price))
         return voo
 
+    @classmethod
     def alter(self: 'Voo', price: float) -> None:
         former_price = self._price
         self._price = float(price)
-        print(f'{self.number} valor alterado de {former_price} para {self._price}')
+        print(f'{self._number} valor alterado de {former_price} para {self._price}')
 
+    @staticmethod
+    def sum_flights_cost(flight_come: 'Voo', flight_leave: 'Voo') -> float:
+        return flight_come.price + flight_leave.price
+
+    @staticmethod
     def get_possible_flights(origin: str, dates: str, flights_list: list) -> list:
         dt_date_start, dt_date_end = map(Data.__date__, map(Data.get_from_string, dates.split()))
         come_froms = [flight for flight in flights_list if flight.destination[0] == origin and flight.departure >= dt_date_start]
@@ -126,15 +127,17 @@ class Voo:
                     possible_flights.append((come, leave))
         return possible_flights
 
+    @staticmethod
     def get_cheapest_flight(flights_list: list) -> tuple:
-        cheapest = Voo.sumFlightsCost(flights_list[0][0], flights_list[0][1])
+        cheapest = Voo.sum_flights_cost(flights_list[0][0], flights_list[0][1])
         for flight in flights_list:
-            if Voo.sumFlightsCost(flight[0], flight[1]) <= cheapest:
+            if Voo.sum_flights_cost(flight[0], flight[1]) <= cheapest:
                 pass
             else:
                 flights_list.remove(flight)
         return flights_list[0]
 
+    @staticmethod
     def plan(origin: str, dates: str, flights_list: list) -> None:
         possible_flights = Voo.get_possible_flights(origin, dates, flights_list)
 
