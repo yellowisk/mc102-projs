@@ -1,5 +1,5 @@
 # RA: 245293
-# https://github.com/guilhermevleite/mc102_24-1
+# source: https://github.com/guilhermevleite/mc102_24-1
 
 from datetime import date
 import sys
@@ -97,7 +97,7 @@ class Voo:
 
     def __str__(self: 'Voo') -> str:
         return f'{self._number} {self._destination[0]} {self._destination[1]} {self._departure} {self._price}'
-    
+
     @staticmethod
     def register(number: str, destination: str, departure: str, price: float) -> 'Voo':
         date = Data.get_from_string(departure).__date__()
