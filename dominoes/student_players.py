@@ -25,20 +25,40 @@ class Weights():
         self.store = weights
         #print(self._store)
 
-    def ajuda_dupla(self,jogadas,tiles):
+    def ajuda_dupla(self,jogadas,tiles,allynot):
         if len(jogadas)>=3:
             p_ally=jogadas[-2]
             if p_ally[3]==None:
+                allynot.append(p_ally[1])
                 for i in tiles:
-                    if i[0]==p_ally[1][0] or i[1]==p_ally[1][0]:
+                    if i[0] in p_ally[1] or i[1]==p_ally[1]:
                         self.store[(i[0],i[1],i[0]+i[1])]+=1
                         
-                    if i[0]==p_ally[1][1] or i[1]==p_ally[1][1]:
-                        self.store[(i[0],i[1],i[0]+i[1])]+=1
 
-    def forcaDupla(self, tiles):
-        pass
-        
+    def forca_dupla(self, doubles,extremos):
+        playable=[]
+        pesos=[]
+        maior_soma=None
+        if len(doubles)!=0:
+            for i in doubles:
+                if i[0] in extremos or i[1] in extremos:
+                    playable.append(i)
+                    pesos.append(self._store[i])
+            if len(playable)==0:
+                return maior_soma
+            
+            melhor=max(pesos)
+            melhor_melhor=-1
+            if pesos.count(melhor)>1:
+                for i in range(pesos.count(melhor)):
+                    if playable[pesos.index(melhor)][2]>melhor_melhor:
+                        melhor_melhor=playable[pesos.index(melhor)][2]
+                        maior_soma=(playable[pesos.index(melhor)][0],playable[pesos.index(melhor)][1])
+                        pesos[pesos.index(melhor)]-=1
+                return maior_soma
+            else:
+                return (playable[pesos.index(melhor)][0],playable[pesos.index(melhor)][1])
+        return maior_soma
 
          
 
@@ -49,18 +69,18 @@ class NonePLayer(Player):
         pesos.gen()
         self._weights = pesos
         self._doubles = None
+        self._allynot = []
 
     def get_doubles(self):
         doubles = []
         for tile in self.tiles:
             if tile[0] == tile[1]:
-                doubles.append(tile)
+                doubles.append((tile[0],tile[1],tile[0]+tile[1]))
         self._doubles=doubles
 
     def play(self, board_extremes, play_hist):
-        self.get_doubles()
-        print(self.tiles)
-        print(self._doubles)
+
+
         #print(play_hist)
         playable_tiles = self._tiles
         return 1, random.choice(playable_tiles)
