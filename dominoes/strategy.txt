@@ -1,0 +1,30 @@
+    Basicamente, a nossa estratégia se baseia em "nos livrar" das peças que tem dois números iguais primeiro
+para depois aumentar a probabilidade de, com poucas peças sobrando, estarmos com uma mão que se encaixa em
+algum dos extremos. Enquanto, ao mesmo tempo, adicionamos "peso" à algumas peças que temos em nossa mão para 
+decidirmos qual será a melhor peça a ser jogada, através de duas principais funções para isso, que são 
+própria_mao e ajuda_aliado, ambas dentro da classe Weights.
+
+    O nosso código, fora isso, sempre prioriza, se possível, uma jogada que possivelmente mudaria os extremos
+para algo que o nosso oponente não tem na mão, o que está mais detalhado na documentação da função "sabotage",
+mas essencialmente, observamos quando o nosso oponente imediatamente depois não consegue jogar algo e tentamos
+"manter" tais extremos de quando ele não conseguiu jogar algo. Mesmo assim considerando os pesos entre as 
+peças que são possíveis jogar para bloquear o oponente.
+
+    Caso não seja possível, procuramos, caso ainda tenhamos em nosssas mãos peças duplas, e tentamos jogar 
+a peça dupla que tem maior peso de acordo com os parâmetros anteriormente mencionados e, se não tivermos peças
+duplas jogáveis ou simplesmente não tivermos peças duplas, procuramos jogar peças não duplas também levando em
+consideração quais destas peças tem o maior peso e, se não tivermos nenhumas destas peças jogáveis, não tem 
+muito o que fazer.
+
+    Outra coisa importante do nosso código é que a função "própria_mao" está valorizando jogarmos peças das quais
+mais tem frequência em nossa mão. Enquanto a função ajuda_aliado essencialmente tenta fazer com que um jogador
+jogue peças parecidas com a do seu aliado. Juntando ambas e já que os dois jogadores são espelhados, os nossos
+jogadores no final acabam se ajudando pois um tenta jogar o que mais tem na mão e o outro tenta jogar também o que
+o seu aliado mais tem na mão.
+
+     A classe Weights anteriormente mencionada foi criada principalmente para organização e separação de tudo que
+utilizamos para adicionarmos, criar e usar os pesos, como a função general e sabotage sendo a função general a
+que decide qual é o melhor movimento no caso onde não seja possível, com a função sabotage, atrapalhar o oponente,
+desta forma, já que cada um dos jogadores tem um objeto novo do tipo Weights, isolamos completamente o que é usado
+como peso por cada um dos jogadores. A cada jogo também "resetamos" os pesos para que as funções que utilizamos
+realmente só levem em consideração o que temos em nossas mão naquele exato momento.
